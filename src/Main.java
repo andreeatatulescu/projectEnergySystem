@@ -1,3 +1,6 @@
+import input.Input;
+import input.InputLoader;
+
 /**
  * Entry point to the simulation
  */
@@ -12,5 +15,8 @@ public final class Main {
      * @throws Exception might error when reading/writing/opening files, parsing JSON
      */
     public static void main(final String[] args) throws Exception {
+        InputLoader inputLoader = new InputLoader(args[0]);
+        Input input = inputLoader.readData();
+        System.out.println(input);
     }
 }
