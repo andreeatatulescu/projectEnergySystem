@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class InitialRound {
+public final class InitialRound {
+    static final double PROFIT = 0.2;
+
     /**
      * calculates init prices for contracts
      * @param distributor
@@ -26,7 +28,7 @@ public class InitialRound {
     public int initPrices(final Distributor distributor) {
         return  (int) (distributor.getInitialInfrastructureCost()
                 + distributor.getProductionCost()
-                + 0.2 * distributor.getProductionCost());
+                + PROFIT * distributor.getProductionCost());
     }
 
     private Contract contractaux = new Contract(0, 0, 0);
@@ -71,23 +73,23 @@ public class InitialRound {
         }
 
         for (Distributor distributor : distributorsAll) {
-            ProducerStrategy strategy = StrategyFactory.createStrategy(distributor.getProducerStrategy(), producersAll);
+            ProducerStrategy strategy = StrategyFactory
+                    .createStrategy(distributor.getProducerStrategy(), producersAll);
             strategy.sortByStrategy();
 
             int energyCnt = 0;
 
             for (Producer producer : producersAll) {
-                while (energyCnt < distributor.getEnergyNeededKW() && producer.getNrDistributors() < producer.getMaxDistributors()) {
+                while (energyCnt < distributor.getEnergyNeededKW()
+                        && producer.getNrDistributors() < producer.getMaxDistributors()) {
                     distributor.getProducersList().add(producer);
                     producer.getCurrentDistributorsIds().add(distributor.getId());
-                    producer.setNrDistributors(producer.getNrDistributors() +1);
+                    producer.setNrDistributors(producer.getNrDistributors() + 1);
                     energyCnt += producer.getEnergyPerDistributor();
                     break;
                 }
             }
         }
-
-
 
         for (Distributor distributor : distributorsAll) {
             distributor.setProductionCost(distributor.calculateProductionCost());

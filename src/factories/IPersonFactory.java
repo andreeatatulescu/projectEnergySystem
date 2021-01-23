@@ -8,13 +8,17 @@ import persons.Consumer;
 import persons.Distributor;
 import persons.Producer;
 
-public class IPersonFactory {
+public final class IPersonFactory {
     private static IPersonFactory instance = null;
 
     private IPersonFactory() {
 
     }
 
+    /**
+     * Singleton implementation
+     * @return an instance of IPersonFactory
+     */
     public static IPersonFactory getInstance() {
         if (instance == null) {
             instance = new IPersonFactory();
@@ -23,9 +27,9 @@ public class IPersonFactory {
     }
     /**
      * getPERSON
-     * @param personType
-     * @param obj
-     * @return
+     * @param personType - consumer/ distributor/ producer
+     * @param obj - the Object from input
+     * @return a new person
      */
     public IPerson getPerson(final String personType, final Object obj) {
         if (personType == null) {

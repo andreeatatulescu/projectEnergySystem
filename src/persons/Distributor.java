@@ -4,9 +4,10 @@ import documents.Contract;
 import interfaces.IPerson;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Distributor implements IPerson {
+public final class Distributor implements IPerson {
+    static final int DIV = 10;
+    static final double PROFIT = 0.2;
     private final int id;
     private final int contractLength;
     private int initialBudget;
@@ -35,7 +36,6 @@ public class Distributor implements IPerson {
         this.contractCost = 0;
         this.isBankrupt = false;
         this.ok = true;
-      //  this.contracts = null;
     }
 
     public int getId() {
@@ -131,23 +131,31 @@ public class Distributor implements IPerson {
         this.initialBudget += sum;
     }
 
+    /**
+     * formula in order to calculate the productionCOst
+     * @return productionCost
+     */
     public int calculateProductionCost() {
         int prodCost = 0;
         for (Producer producer : producersList) {
             prodCost += producer.getEnergyPerDistributor() * producer.getPriceKW();
         }
-        return prodCost / 10;
+        return prodCost / DIV;
     }
 
+    /**
+     * formul ain order to calculate contractPrice
+     * @return contractPrice
+     */
     public int getContractPrice() {
         int price = 0;
         if (this.contracts.size() > 0) {
             price = (int) (this.initialInfrastructureCost / this.contracts.size()
                     + this.getProductionCost()
-                    + 0.2 * this.getProductionCost());
+                    + PROFIT * this.getProductionCost());
         } else if (this.contracts.size() == 0) {
             price = (int) (this.initialInfrastructureCost + this.getProductionCost()
-                    + 0.2 * this.getProductionCost());
+                    + PROFIT * this.getProductionCost());
         }
         this.contractCost = price;
         return price;

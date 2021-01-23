@@ -8,7 +8,7 @@ import interfaces.IPerson;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Producer implements IPerson {
+public final class Producer implements IPerson {
     private final int id;
     private final String energyType;
     private boolean isRenewable;
@@ -31,7 +31,6 @@ public class Producer implements IPerson {
         this.priceKW = priceKW;
         this.energyPerDistributor = energyPerDistributor;
         this.nrDistributors = 0;
-      //  this.monthlyStats = null;
     }
 
     public int getId() {
@@ -90,6 +89,10 @@ public class Producer implements IPerson {
         this.currentDistributorsIds = currentDistributorsIds;
     }
 
+    /**
+     * check what type of energy (renewable or not) for GREEN Strategy
+     * @return boolean isRenewable
+     */
     public boolean renew() {
         if (this.energyType.equals(EnergyType.COAL.getLabel())) {
             isRenewable = EnergyType.COAL.isRenewable();

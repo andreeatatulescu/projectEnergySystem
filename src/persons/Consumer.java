@@ -6,7 +6,7 @@ import interfaces.IPerson;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consumer implements IPerson {
+public final class Consumer implements IPerson {
     private final int id;
     private boolean isBankrupt;
     private int initialBudget;

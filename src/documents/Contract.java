@@ -1,6 +1,6 @@
 package documents;
 
-public class Contract {
+public final class Contract {
     private int consumerId;
     private int price;
     private int remainedContractMonths;

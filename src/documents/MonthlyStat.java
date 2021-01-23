@@ -3,7 +3,7 @@ package documents;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MonthlyStat {
+public final class MonthlyStat {
     private final int month;
     private ArrayList<Integer> distributorsIds;
 

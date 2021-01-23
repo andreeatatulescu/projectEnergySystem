@@ -15,6 +15,10 @@ public final class ConsumerOutput {
         return id;
     }
 
+    /**
+     * getter for isBankrupt in order to write in results.out according to ref files
+     * @return boolean isBankrupt
+     */
     public boolean getisBankrupt() {
         return isBankrupt;
     }

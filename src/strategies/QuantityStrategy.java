@@ -16,8 +16,8 @@ public final class QuantityStrategy implements ProducerStrategy {
     @Override
     public void sortByStrategy() {
 
-        producers.sort(Comparator.comparing(Producer::getEnergyPerDistributor, Comparator.reverseOrder())
-                .thenComparing(Producer::getId));
+        producers.sort(Comparator.comparing(Producer::getEnergyPerDistributor,
+                Comparator.reverseOrder()).thenComparing(Producer::getId));
 
     }
 

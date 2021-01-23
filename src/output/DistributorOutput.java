@@ -3,7 +3,6 @@ package output;
 import documents.Contract;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class DistributorOutput {
     private final int id;
@@ -47,7 +46,10 @@ public final class DistributorOutput {
     public String getProducerStrategy() {
         return producerStrategy;
     }
-
+    /**
+     * getter for isBankrupt in order to write in results.out according to ref files
+     * @return boolean isBankrupt
+     */
     public boolean getisBankrupt() {
         return isBankrupt;
     }

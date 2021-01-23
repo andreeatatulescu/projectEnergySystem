@@ -1,10 +1,8 @@
 package interfaces;
 
-import persons.Producer;
-
-import java.util.List;
-
 public interface ProducerStrategy {
-
+    /**
+     * sorting by strategy criteria
+     */
     void sortByStrategy();
 }

@@ -12,9 +12,15 @@ import persons.Consumer;
 import persons.Distributor;
 import persons.Producer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class BasicRound {
+public final class BasicRound {
+    static final double PROFIT = 0.2;
+    static final double REST = 1.2;
     private LinkedList<Distributor> distributorsAllUpdate = new LinkedList<>();
     private LinkedList<Consumer> consumersAllUpdate = new LinkedList<>();
     private LinkedList<Producer> producersAllUpdate = new LinkedList<>();
@@ -63,13 +69,12 @@ public class BasicRound {
         consumersAllUpdate.addAll(consumers);
         producersAllUpdate.addAll(producers);
 
-      //  System.out.println(pos);
-
         for (Producer producer : producersAllUpdate) {
             MonthlyStat newMonth = new MonthlyStat(pos + 1);
             producer.getMonthlyStats().add(newMonth);
             if (input.getMonthlyUpdatesData().get(pos).getProducerChanges().isEmpty()) {
-                producer.getMonthlyStats().get(pos).setDistributorsIds(producer.getCurrentDistributorsIds());
+                producer.getMonthlyStats().get(pos)
+                        .setDistributorsIds(producer.getCurrentDistributorsIds());
             }
         }
 
@@ -79,15 +84,15 @@ public class BasicRound {
         for (Distributor distributor : distributorsAllUpdate) {
             if (!distributor.isBankrupt()) {
                 int price = 0;
-                if ( distributor.getContracts().size() > 0 ) {
+                if (distributor.getContracts().size() > 0) {
                     price = (int) (distributor.getInitialInfrastructureCost()
                             / distributor.getContracts().size()
                             + distributor.getProductionCost()
-                            + 0.2 * distributor.getProductionCost());
-                } else if ( distributor.getContracts().size() == 0 ) {
+                            + PROFIT * distributor.getProductionCost());
+                } else if (distributor.getContracts().size() == 0) {
                     price = (int) (distributor.getInitialInfrastructureCost()
                             + distributor.getProductionCost()
-                            + 0.2 * distributor.getProductionCost());
+                            + PROFIT * distributor.getProductionCost());
                 }
                 distributorsByPrice.put(distributor.getId(), price);
             }
@@ -160,11 +165,11 @@ public class BasicRound {
                         // pay the restant bill if the consumer can afford it
                         if (consumer.getInitialBudget()
                                 >= (int) (consumer.getContractInfo().get(0)
-                                .getPrice() + 1.2 * consumer.getRest())) {
+                                .getPrice() + REST * consumer.getRest())) {
                             consumer.setInitialBudget(consumer
                                     .getInitialBudget() - (int) (consumer
                                     .getContractInfo().get(0).getPrice()
-                                    + 1.2 * consumer.getRest()));
+                                    + REST * consumer.getRest()));
                         } else {
                             consumer.setBankrupt(true);
                             consumer.setAlert(false);
@@ -217,7 +222,6 @@ public class BasicRound {
         // updates for Producers
         readUpdateProducer(input, pos);
 
-
         // 1 month has passed
         for (Distributor distributor : distributorsAllUpdate) {
             if (!distributor.getContracts().isEmpty()) {
@@ -238,8 +242,8 @@ public class BasicRound {
 
     /**
      * read monthlyUpdates one by one
-     * @param input
-     * @param pos
+     * @param input - initial data
+     * @param pos - current month - 1 (current position)
      */
     public void readUpdate(final Input input, final int pos) {
         IPersonFactory personFactory = IPersonFactory.getInstance();
@@ -257,7 +261,8 @@ public class BasicRound {
                     .get(pos).getDistributorChanges()) {
                 for (Distributor distributor : distributorsAllUpdate) {
                     if (distributorChange.getId() == distributor.getId()) {
-                        distributor.setInitialInfrastructureCost(distributorChange.getInfrastructureCost());
+                        distributor.setInitialInfrastructureCost(distributorChange
+                                .getInfrastructureCost());
                     }
                 }
             }
@@ -265,8 +270,12 @@ public class BasicRound {
 
     }
 
+    /**
+     * read ProducerUpdates
+     * @param input - initial data
+     * @param pos - current month - 1 (current position)
+     */
     public void readUpdateProducer(final Input input, final int pos) {
-
         if (!input.getMonthlyUpdatesData().get(pos).getProducerChanges().isEmpty()) {
             for (ProducerChanges producerChange : input.getMonthlyUpdatesData()
                     .get(pos).getProducerChanges()) {

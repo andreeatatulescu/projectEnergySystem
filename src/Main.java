@@ -1,12 +1,9 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import documents.MonthlyStat;
 import factories.IPersonFactory;
-import factories.StrategyFactory;
 import gameflow.BasicRound;
 import gameflow.InitialRound;
-import input.*;
-import interfaces.IPerson;
-import interfaces.ProducerStrategy;
+import input.Input;
+import input.InputLoader;
 import output.ConsumerOutput;
 import output.DistributorOutput;
 import output.ProducerOutput;
@@ -33,47 +30,6 @@ public final class Main {
      * @throws Exception might error when reading/writing/opening files, parsing JSON
      */
     public static void main(final String[] args) throws Exception {
-//        InputLoader inputLoader = new InputLoader(args[0]);
-//        Input input = inputLoader.readData();
-//
-//        ArrayList<Consumer> consumersAll = new ArrayList<>();
-//        ArrayList<Distributor> distributorsAll = new ArrayList<>();
-//        ArrayList<Producer> producersAll = new ArrayList<>();
-//        List<ConsumerOutput> consumerOutput = new ArrayList<>();
-//        List<DistributorOutput> distributorOutput = new ArrayList<>();
-//        List<ProducerOutput> producerOutput = new ArrayList<>();
-//
-//        System.out.println(input);
-//
-//        IPersonFactory personFactory = IPersonFactory.getInstance();
-//        // forming the lists of consumers and distributors
-//        for (ConsumerInputData consumer : input.getConsumersData()) {
-//            IPerson newConsumator = personFactory.getPerson("CONSUMER", consumer);
-//            consumersAll.add((Consumer) newConsumator);
-//        }
-//
-//        for (DistributorInputData distributor : input.getDistributorsData()) {
-//            IPerson newDistributor = personFactory.getPerson("DISTRIBUTOR", distributor);
-//            distributorsAll.add((Distributor) newDistributor);
-//        }
-//
-//        for (ProducerInputData producer : input.getProducersData()) {
-//            IPerson newProducer = personFactory.getPerson("PRODUCER", producer);
-//            producersAll.add((Producer) newProducer);
-//        }
-//
-//        System.out.println(consumersAll);
-//        System.out.println(distributorsAll);
-//        System.out.println(producersAll);
-//
-//        System.out.println(distributorsAll.get(0).getProducerStrategy());
-//
-//        ProducerStrategy strategy = StrategyFactory.createStrategy(distributorsAll.get(0).getProducerStrategy(), producersAll);
-//
-//        strategy.sortByStrategy();
-//
-//        System.out.println(producersAll);
-
         InputLoader inputLoader = new InputLoader(args[0]);
         InitialRound start = new InitialRound();
         IPersonFactory personFactory = IPersonFactory.getInstance();
@@ -100,8 +56,6 @@ public final class Main {
 //        System.out.println(distributorsAll);
 //        System.out.println(producersAll);
 
-
-
         // ROUND 1
         BasicRound round = new BasicRound();
         round.doBasicRound(consumersAll, distributorsAll, producersAll, input, 0);
@@ -126,53 +80,6 @@ public final class Main {
         distributorsAll.addAll(round.getDistributorsAllUpdate());
         producersAll.clear();
         producersAll.addAll(round.getProducersAllUpdate());
-
-
-
-
-
-
-
-//        // forming the final arrays for output
-//        for (Distributor distributor : distributorsAll) {
-//            distributorOutput.add(new DistributorOutput(
-//                    distributor.getId(),
-//                    distributor.getInitialBudget(),
-//                    distributor.isBankrupt(),
-//                    distributor.getContracts()));
-//        }
-//
-//        for (Consumer consumer : consumersAll) {
-//            consumerOutput.add(new ConsumerOutput(
-//                    consumer.getId(),
-//                    consumer.isBankRupt(),
-//                    consumer.getInitialBudget()));
-//        }
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Writer writer = new Writer(consumerOutput, distributorOutput);
-//        writer.writeFile(objectMapper, args[1]);
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // forming the final arrays for output
         for (Distributor distributor : distributorsAll) {
