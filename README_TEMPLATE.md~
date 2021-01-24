@@ -136,10 +136,10 @@ src
 
 ### OOPL
 
-	OOPL speaking, I have used inheritance and abstractization for the 
-	classes which implements interfaces, and also encapsulation, 
-	having finals fields and classes which cannot be modified by someone else, 
-	just by using public methods - getters and setters.
+	OOPL speaking, I have used inheritance for the classes which implements
+	interfaces, encapsulation and abstractization, having finals fields
+	and classes which cannot be modified by someone else, just by using
+	public methods - getters and setters.
 
 
 ### Design patterns
@@ -160,18 +160,7 @@ src
 
 ### Difficulties
 
-	For the complex tests, I had a problem because my Observer implementation
-	was removing the producer's current distributors all at once and when 
-	it came to choose again, some distributors arrived at different producers
-	from the ones showed in ref. To solve this, I had to remove the
-	distributors one by one.
-	
-	Also it was a problem with the distributorIds
-	order because it wasn't sorted from the begin, but I solved using Collections.
-	
-	
-## Feedback
-	* easier tests comparing to the ones from phase 1, but it was good because
-	I had no problems with the bankrupt consumers/distributors and contract
-	prices.
-	* checker/README nice
+e.g. pentru a rezolva problema X de checkstyle am facut ...
+
+[optional ## Feedback, comments
+

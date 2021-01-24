@@ -5,6 +5,7 @@ import documents.Contract;
 public interface IPerson {
     /**
      * onorates payments
+     *
      * @param costs
      * @param contract
      */
@@ -12,6 +13,7 @@ public interface IPerson {
 
     /**
      * gives money
+     *
      * @param sum
      */
     void monthlyReceive(int sum);
