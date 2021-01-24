@@ -118,9 +118,9 @@ public final class Producer extends Observable implements IPerson {
                 + ", priceKW=" + priceKW
                 + ", energyPerDistributor=" + energyPerDistributor
                 + ", currentDistributorsIds=" + currentDistributorsIds
-                + ", monthlyStats=" + monthlyStats + '}' + "\n";
+                + ", monthlyStats=" + monthlyStats
+                + '}';
     }
-
 
     @Override
     public void monthlyPay(int costs, Contract contract) {
@@ -132,10 +132,14 @@ public final class Producer extends Observable implements IPerson {
 
     }
 
-    public void changeEnergy (int newEnergy) {
+    /**
+     * update Producers Info, notify distributors if there are updates, clear observers list
+     * @param newEnergy new data
+     */
+    public void changeEnergy(final int newEnergy) {
         this.setEnergyPerDistributor(newEnergy);
         this.setChanged();
-        this.notifyObservers(this.id);
+        this.notifyObservers(id);
         this.deleteObservers();
     }
 }

@@ -51,19 +51,10 @@ public final class Main {
         consumersAll.addAll(start.getConsumersAll());
         distributorsAll.addAll(start.getDistributorsAll());
         producersAll.addAll(start.getProducersAll());
-//        System.out.println("==================== ROUND 0 ==============================");
-//        System.out.println(consumersAll);
-//        System.out.println(distributorsAll);
-//        System.out.println(producersAll);
 
         // ROUND 1
         BasicRound round = new BasicRound();
-//        System.out.println("==================== ROUND 1 ==============================");
         round.doBasicRound(consumersAll, distributorsAll, producersAll, input, 0);
-
-//        System.out.println(consumersAll);
-//        System.out.println(distributorsAll);
-//        System.out.println(producersAll);
 
         consumersAll.clear();
         distributorsAll.clear();
@@ -71,7 +62,6 @@ public final class Main {
 
         // OTHER ROUNDS
         for (int i = 1; i < input.getNumberofTurns(); i++) {
-            System.out.println("==================== ROUND " + (i + 1) + " ==============================");
             round.doBasicRound(consumersAll, distributorsAll, producersAll, input, i);
         }
 

@@ -51,7 +51,7 @@ public final class Input {
     @Override
     public String toString() {
         return "Input{"
-                + "numberofTurns=" + numberofTurns
+                + "numberOfTurns=" + numberofTurns
                 + ", consumersData=" + consumersData
                 + ", distributorsData=" + distributorsData
                 + ", producersData=" + producersData

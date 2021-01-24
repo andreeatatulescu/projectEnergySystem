@@ -1,9 +1,7 @@
 package persons;
 
 import documents.Contract;
-import factories.StrategyFactory;
 import interfaces.IPerson;
-import interfaces.ProducerStrategy;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -194,8 +192,8 @@ public final class Distributor implements IPerson, Observer {
     }
 
     @Override
-    public void update(Observable o, Object id) {
-        getProducersList().removeIf(producer -> producer.getId() == (int) id);
+    public void update(Observable o, Object idProd) {
+        getProducersList().removeIf(producer -> producer.getId() == (int) idProd);
         getProducersList().clear();
     }
 }
