@@ -118,7 +118,7 @@ public final class Producer extends Observable implements IPerson {
                 + ", priceKW=" + priceKW
                 + ", energyPerDistributor=" + energyPerDistributor
                 + ", currentDistributorsIds=" + currentDistributorsIds
-                + ", monthlyStats=" + monthlyStats + '}';
+                + ", monthlyStats=" + monthlyStats + '}' + "\n";
     }
 
 
@@ -134,9 +134,6 @@ public final class Producer extends Observable implements IPerson {
 
     public void changeEnergy (int newEnergy) {
         this.setEnergyPerDistributor(newEnergy);
-      //  System.out.println(this);
-        setCurrentDistributorsIds(new ArrayList<>());
-        setNrDistributors(0);
         this.setChanged();
         this.notifyObservers(this.id);
         this.deleteObservers();
