@@ -139,5 +139,6 @@ public final class Producer extends Observable implements IPerson {
         setNrDistributors(0);
         this.setChanged();
         this.notifyObservers(this.id);
+        this.deleteObservers();
     }
 }

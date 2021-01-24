@@ -195,7 +195,6 @@ public final class Distributor implements IPerson, Observer {
 
     @Override
     public void update(Observable o, Object id) {
-       // System.out.println("ia");
         getProducersList().removeIf(producer -> producer.getId() == (int) id);
         getProducersList().clear();
     }
