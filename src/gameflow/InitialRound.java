@@ -84,6 +84,7 @@ public final class InitialRound {
                         && producer.getNrDistributors() < producer.getMaxDistributors()) {
                     distributor.getProducersList().add(producer);
                     producer.getCurrentDistributorsIds().add(distributor.getId());
+                    producer.addObserver(distributor);
                     producer.setNrDistributors(producer.getNrDistributors() + 1);
                     energyCnt += producer.getEnergyPerDistributor();
                     break;

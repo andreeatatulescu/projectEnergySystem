@@ -1,11 +1,15 @@
 package persons;
 
 import documents.Contract;
+import factories.StrategyFactory;
 import interfaces.IPerson;
+import interfaces.ProducerStrategy;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public final class Distributor implements IPerson {
+public final class Distributor implements IPerson, Observer {
     static final int DIV = 10;
     static final double PROFIT = 0.2;
     private final int id;
@@ -106,6 +110,10 @@ public final class Distributor implements IPerson {
         this.initialInfrastructureCost = initialInfrastructureCost;
     }
 
+    public void setContractCost(int contractCost) {
+        this.contractCost = contractCost;
+    }
+
     @Override
     public String toString() {
         return "Distributor{" + "id=" + id
@@ -117,7 +125,7 @@ public final class Distributor implements IPerson {
                 + ", contractCost=" + contractCost
                 + ", isBankrupt=" + isBankrupt
                 + ", contracts=" + contracts
-                + ", producers=" + producersList
+                + ", producersLIST=" + producersList
                 + '}';
     }
 
@@ -183,5 +191,12 @@ public final class Distributor implements IPerson {
             }
         }
         return costs;
+    }
+
+    @Override
+    public void update(Observable o, Object id) {
+       // System.out.println("ia");
+        getProducersList().removeIf(producer -> producer.getId() == (int) id);
+        getProducersList().clear();
     }
 }

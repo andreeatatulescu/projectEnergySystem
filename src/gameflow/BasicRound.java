@@ -3,20 +3,18 @@ package gameflow;
 import documents.Contract;
 import documents.MonthlyStat;
 import factories.IPersonFactory;
+import factories.StrategyFactory;
 import input.ConsumerInputData;
 import input.DistributorChanges;
 import input.Input;
 import input.ProducerChanges;
 import interfaces.IPerson;
+import interfaces.ProducerStrategy;
 import persons.Consumer;
 import persons.Distributor;
 import persons.Producer;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class BasicRound {
     static final double PROFIT = 0.2;
@@ -70,16 +68,18 @@ public final class BasicRound {
         producersAllUpdate.addAll(producers);
 
         for (Producer producer : producersAllUpdate) {
+            ArrayList<Integer> currentDistrib = new ArrayList<>();
+            currentDistrib.addAll(producer.getCurrentDistributorsIds());
             MonthlyStat newMonth = new MonthlyStat(pos + 1);
             producer.getMonthlyStats().add(newMonth);
-            if (input.getMonthlyUpdatesData().get(pos).getProducerChanges().isEmpty()) {
-                producer.getMonthlyStats().get(pos)
-                        .setDistributorsIds(producer.getCurrentDistributorsIds());
-            }
+            producer.getMonthlyStats().get(pos)
+                    .setDistributorsIds(currentDistrib);
+
         }
 
         // reading monthlyUpdates
         readUpdate(input, pos);
+
         // recalculating contracts price
         for (Distributor distributor : distributorsAllUpdate) {
             if (!distributor.isBankrupt()) {
@@ -89,10 +89,12 @@ public final class BasicRound {
                             / distributor.getContracts().size()
                             + distributor.getProductionCost()
                             + PROFIT * distributor.getProductionCost());
+                    distributor.setContractCost(price);
                 } else if (distributor.getContracts().size() == 0) {
                     price = (int) (distributor.getInitialInfrastructureCost()
                             + distributor.getProductionCost()
                             + PROFIT * distributor.getProductionCost());
+                    distributor.setContractCost(price);
                 }
                 distributorsByPrice.put(distributor.getId(), price);
             }
@@ -222,6 +224,17 @@ public final class BasicRound {
         // updates for Producers
         readUpdateProducer(input, pos);
 
+//        for (Producer producer : producersAllUpdate) {
+//            Collections.sort(producers.);
+//        }
+
+
+
+        System.out.println(consumersAllUpdate);
+        System.out.println(distributorsAllUpdate);
+        System.out.println(producersAllUpdate);
+
+
         // 1 month has passed
         for (Distributor distributor : distributorsAllUpdate) {
             if (!distributor.getContracts().isEmpty()) {
@@ -277,12 +290,87 @@ public final class BasicRound {
      */
     public void readUpdateProducer(final Input input, final int pos) {
         if (!input.getMonthlyUpdatesData().get(pos).getProducerChanges().isEmpty()) {
+            System.out.println(input.getMonthlyUpdatesData().get(pos).getProducerChanges());
             for (ProducerChanges producerChange : input.getMonthlyUpdatesData()
                     .get(pos).getProducerChanges()) {
-                for (Producer producer : producersAllUpdate) {
-                    if (producerChange.getId() == producer.getId()) {
-                        producer.setEnergyPerDistributor(producerChange.getEnergyPerDistributor());
+
+
+                for (Producer producerAux : producersAllUpdate) {
+                    System.out.println(producersAllUpdate);
+                    System.out.println("o data");
+                    System.out.println(producerAux);
+                    if (producerChange.getId() == producerAux.getId()) {
+                        System.out.println(producerAux);
+                        producerAux.changeEnergy(producerChange.getEnergyPerDistributor());
+                        System.out.println("ia vezi" + producerChange);
+                        producerAux.getMonthlyStats().get(pos).setDistributorsIds(new ArrayList<>());
+
+
+                     //   if (!input.getMonthlyUpdatesData().get(pos).getProducerChanges().isEmpty()) {
+                            for (Distributor distributor : distributorsAllUpdate) {
+                                if (distributor.getProducersList().isEmpty()) {
+                                    for (Producer producer : producersAllUpdate) {
+                                        if ( producer.getCurrentDistributorsIds().contains(distributor.getId()) ) {
+                                            Collections.sort(producer.getCurrentDistributorsIds());
+                                            producer.getCurrentDistributorsIds().remove(Integer.valueOf(distributor.getId()));
+                                            ArrayList<Integer> currentDistrib = new ArrayList<>();
+                                            currentDistrib.addAll(producer.getCurrentDistributorsIds());
+                                            producer.getMonthlyStats().get(pos)
+                                                    .setDistributorsIds(currentDistrib);
+                                        }
+                                    }
+                                }
+                            }
+                     //   }
+
+                     //   if (!input.getMonthlyUpdatesData().get(pos).getProducerChanges().isEmpty()) {
+
+                            for (Distributor distributor : distributorsAllUpdate) {
+                                if (distributor.getProducersList().isEmpty()) {
+                                    System.out.println(distributor);
+                                    System.out.println("ia");
+                                    ProducerStrategy strategy = StrategyFactory
+                                            .createStrategy(distributor.getProducerStrategy(), producersAllUpdate);
+                                    strategy.sortByStrategy();
+
+                                    int energyCnt = 0;
+
+                                    for (Producer producer : producersAllUpdate) {
+                                        if (producer.getCurrentDistributorsIds().contains(distributor.getId())) {
+                                            System.out.println("are?");
+                                            ArrayList<Integer> currentDistrib = new ArrayList<>();
+                                            producer.getMonthlyStats().get(pos)
+                                                    .setDistributorsIds(currentDistrib);
+                                        }
+                                        while (energyCnt < distributor.getEnergyNeededKW()
+                                                && producer.getNrDistributors() < producer.getMaxDistributors()) {
+                                            distributor.getProducersList().add(producer);
+                                            if (!producer.getCurrentDistributorsIds().contains(distributor.getId())) {
+                                                producer.getCurrentDistributorsIds().add(distributor.getId());
+                                                Collections.sort(producer.getCurrentDistributorsIds());
+                                            }
+                                            ArrayList<Integer> currentDistrib = new ArrayList<>();
+                                            currentDistrib.addAll(producer.getCurrentDistributorsIds());
+                                            Collections.sort(producer.getCurrentDistributorsIds());
+                                            System.out.println(currentDistrib);
+                                            producer.getMonthlyStats().get(pos)
+                                                    .setDistributorsIds(currentDistrib);
+                                            producer.addObserver(distributor);
+                                            producer.setNrDistributors(producer.getNrDistributors() + 1);
+                                            energyCnt += producer.getEnergyPerDistributor();
+                                            break;
+                                        }
+                                    }
+                                    System.out.println(distributor);
+                                }
+                            }
+
+                            for (Distributor distributor : distributorsAllUpdate) {
+                                distributor.setProductionCost(distributor.calculateProductionCost());
+                            }
+                            break;
                     }
+                    System.out.println("done=========================================================");
                 }
             }
         }

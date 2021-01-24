@@ -7,8 +7,9 @@ import interfaces.IPerson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
-public final class Producer implements IPerson {
+public final class Producer extends Observable implements IPerson {
     private final int id;
     private final String energyType;
     private boolean isRenewable;
@@ -120,6 +121,7 @@ public final class Producer implements IPerson {
                 + ", monthlyStats=" + monthlyStats + '}';
     }
 
+
     @Override
     public void monthlyPay(int costs, Contract contract) {
 
@@ -128,5 +130,14 @@ public final class Producer implements IPerson {
     @Override
     public void monthlyReceive(int sum) {
 
+    }
+
+    public void changeEnergy (int newEnergy) {
+        this.setEnergyPerDistributor(newEnergy);
+      //  System.out.println(this);
+        setCurrentDistributorsIds(new ArrayList<>());
+        setNrDistributors(0);
+        this.setChanged();
+        this.notifyObservers(this.id);
     }
 }
