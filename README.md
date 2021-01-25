@@ -39,6 +39,7 @@ Tutorial Jackson JSON:
 
 ### Structure
 
+```
 src
 |____
     |__commom
@@ -99,6 +100,7 @@ src
     |__Main (the whole game flow)
     |
     |__Test (runs the tests)
+    ```
 
 ### Flow
 
